@@ -1,0 +1,33 @@
+name: Learn GitHub Actions
+run-name: ${{ github.actor }} is learning GitHub Actions!
+on: [push]
+
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+      - run: npm install -g bats
+      - run: bats --version
+      
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Welcome Message
+        run: |
+          echo "🎉 Congratulations! You just ran your first GitHub Action!"
+          echo "Repository: ${{ github.repository }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "On branch: ${{ github.ref }}"
+          
+      - name: Create a file
+        run: echo "This file was created by GitHub Actions at $(date)" > action-result.txt
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: action-output
+          path: action-result.txt
